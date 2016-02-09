@@ -17,21 +17,19 @@ use Yii;
  *
  * @property ProductManufacturer[] $productManufacturers
  */
-class Manufacturer extends \yii\db\ActiveRecord
-{
+class Manufacturer extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'manufacturer';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'created_date', 'updated_date'], 'required'],
             [['address'], 'string'],
@@ -45,8 +43,7 @@ class Manufacturer extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
@@ -61,8 +58,25 @@ class Manufacturer extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductManufacturers()
-    {
+    public function getProductManufacturers() {
         return $this->hasMany(ProductManufacturer::className(), ['manufacturer_id' => 'id']);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+                $this->status = 1;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

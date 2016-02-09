@@ -17,7 +17,7 @@ class m160208_114301_create_category_table extends Migration {
             'id' => $this->primaryKey(),
             'name' => 'VARCHAR(50) NOT NULL',
             'display_name' => 'VARCHAR(100) NULL DEFAULT NULL',
-            'parent_catrgory_id' => 'INT(11) NOT NULL DEFAULT 0',
+            'parent_catrgory_id' => 'INT(11) NULL',
             'created_date' => 'DATETIME NOT NULL',
             'updated_date' => 'DATETIME NOT NULL',
             'status' => 'TINYINT(1) NOT NULL DEFAULT 1',

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use common\helpers\Custom;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -12,20 +13,23 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="manufacturer-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?php echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php
+        echo Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
+        ])
+        ?>
     </p>
 
-    <?= DetailView::widget([
+    <?php
+    echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
@@ -34,8 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'contact_number',
             'created_date',
             'updated_date',
-            'status',
+            [
+                'attribute' => 'status',
+                'value' => Custom::getStatusArray()[$model->status]
+            ],
         ],
-    ]) ?>
+    ])
+    ?>
 
 </div>

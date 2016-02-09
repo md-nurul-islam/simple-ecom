@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
 use common\models\Manufacturer;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -16,6 +17,16 @@ class ManufacturerController extends Controller {
 
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'view', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -57,7 +68,8 @@ class ManufacturerController extends Controller {
      */
     public function actionCreate() {
         $model = new Manufacturer();
-
+        
+        $model->beforeSave(TRUE);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -76,6 +88,7 @@ class ManufacturerController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
+        $model->beforeSave(FALSE);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
