@@ -42,8 +42,8 @@ class ProductCategory extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'product_id' => Yii::t('app', 'Product ID'),
-            'category_id' => Yii::t('app', 'Category ID'),
+            'product_id' => Yii::t('app', 'Product'),
+            'category_id' => Yii::t('app', 'Category'),
         ];
     }
 

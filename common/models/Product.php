@@ -24,23 +24,21 @@ use Yii;
  * @property ProductManufacturer[] $productManufacturers
  * @property ResourcesProduct[] $resourcesProducts
  */
-class Product extends \yii\db\ActiveRecord
-{
+class Product extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'product';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'display_name', 'created_date', 'updated_date'], 'required'],
+            [['name', 'created_date', 'updated_date'], 'required'],
             [['description'], 'string'],
             [['purchase_price', 'selling_price'], 'number'],
             [['is_private', 'status'], 'integer'],
@@ -52,8 +50,7 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
@@ -71,40 +68,53 @@ class Product extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCarts()
-    {
+    public function getCarts() {
         return $this->hasMany(Cart::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCarts0()
-    {
+    public function getCarts0() {
         return $this->hasMany(Cart::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductCategories()
-    {
+    public function getProductCategories() {
         return $this->hasMany(ProductCategory::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProductManufacturers()
-    {
+    public function getProductManufacturers() {
         return $this->hasMany(ProductManufacturer::className(), ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getResourcesProducts()
-    {
+    public function getResourcesProducts() {
         return $this->hasMany(ResourcesProduct::className(), ['product_id' => 'id']);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+                $this->status = 1;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

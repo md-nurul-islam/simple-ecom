@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "resources".
@@ -17,21 +19,19 @@ use Yii;
  *
  * @property ResourcesProduct[] $resourcesProducts
  */
-class Resources extends \yii\db\ActiveRecord
-{
+class Resources extends ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'resources';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'created_date', 'updated_date'], 'required'],
             [['value'], 'string'],
@@ -45,8 +45,7 @@ class Resources extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
@@ -61,8 +60,8 @@ class Resources extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getResourcesProducts()
-    {
+    public function getResourcesProducts() {
         return $this->hasMany(ResourcesProduct::className(), ['resources_id' => 'id']);
     }
+
 }
