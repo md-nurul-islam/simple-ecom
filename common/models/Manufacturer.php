@@ -46,7 +46,7 @@ class Manufacturer extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
+            'name' => Yii::t('app', 'Manufacturer Name'),
             'address' => Yii::t('app', 'Address'),
             'contact_number' => Yii::t('app', 'Contact Number'),
             'created_date' => Yii::t('app', 'Created Date'),

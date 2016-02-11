@@ -27,8 +27,4 @@ class CategoryQuery extends ActiveQuery {
         return $this;
     }
 
-    private function formatForSelect2($categories) {
-        
-    }
-
 }

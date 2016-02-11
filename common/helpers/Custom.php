@@ -12,4 +12,11 @@ class Custom extends ArrayHelper {
         ];
     }
     
+    public static function getIsPrivateArray() {
+        return [
+            0 => 'No',
+            1 => 'Yes',
+        ];
+    }
+    
 }

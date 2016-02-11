@@ -64,4 +64,21 @@ class Resources extends ActiveRecord {
         return $this->hasMany(ResourcesProduct::className(), ['resources_id' => 'id']);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+                $this->status = 1;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

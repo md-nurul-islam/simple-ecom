@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $model common\models\Product */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Product',
-]) . ' ' . $model->name;
+            'modelClass' => 'Product',
+        ]) . ' ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Products'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -16,11 +16,15 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?=
+    $this->render('_form', [
         'model' => $model,
+        'model_manufacturer' => $model_manufacturer,
+        'model_product_manufacturer' => $model_product_manufacturer,
         'model_category' => $model_category,
         'model_product_category' => $model_product_category,
         'upload_model' => $upload_model,
-    ]) ?>
+    ])
+    ?>
 
 </div>

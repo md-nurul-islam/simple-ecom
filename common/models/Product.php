@@ -53,7 +53,7 @@ class Product extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
+            'name' => Yii::t('app', 'Product Name'),
             'display_name' => Yii::t('app', 'Display Name'),
             'description' => Yii::t('app', 'Description'),
             'purchase_price' => Yii::t('app', 'Purchase Price'),
@@ -69,13 +69,6 @@ class Product extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
     public function getCarts() {
-        return $this->hasMany(Cart::className(), ['product_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCarts0() {
         return $this->hasMany(Cart::className(), ['product_id' => 'id']);
     }
 

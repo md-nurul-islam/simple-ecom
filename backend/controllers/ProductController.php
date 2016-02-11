@@ -4,15 +4,19 @@ namespace backend\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use common\models\Product;
-use common\models\ProductCategory;
-use common\models\Category;
-use common\models\UploadForm;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use common\models\Product;
+use common\models\ProductCategory;
+use common\models\Category;
+use common\models\UploadForm;
+use common\models\ResourcesProduct;
+use common\models\Resources;
+use common\models\Manufacturer;
+use common\models\ProductManufacturer;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -60,6 +64,9 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionView($id) {
+
+        $model = Product::findOne($id);
+
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
@@ -72,16 +79,23 @@ class ProductController extends Controller {
      */
     public function actionCreate() {
         $model = new Product();
+
         $model_category = new Category();
         $model_product_category = new ProductCategory();
+
+        $model_manufacturer = new Manufacturer();
+        $model_product_manufacturer = new ProductManufacturer();
+
         $upload_model = new UploadForm;
+        $resource = new Resources();
+        $resource_product = new ResourcesProduct();
 
         if (isset($_POST['Product']) && !empty($_POST['Product'])) {
 
             $model->attributes = $_POST['Product'];
             $model->beforeSave(TRUE);
 
-            if ($model->validate()) {
+            if ($model->validate() && $model->save()) {
 
                 if (empty($_POST['ProductCategory']['category_id'])) {
                     $model_product_category->addError('category_id', 'No category selected.');
@@ -91,37 +105,46 @@ class ProductController extends Controller {
                         $model_product_category = new ProductCategory();
                         $model_product_category->product_id = $model->id;
                         $model_product_category->category_id = $category;
+                        $model_product_category->save();
                     }
                 }
-                
-                $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
-                $uploaded_files = $upload_model->upload();
-                if (!empty($uploaded_files)) {
-                    
-                }
-                
-            } else {
-                var_dump($model->errors);
-            }
 
-            var_dump($_POST);
-            exit;
+                if (isset($_POST['ProductManufacturer']) && !empty($_POST['ProductManufacturer']['manufacturer_id'])) {
+                    $model_product_manufacturer->attributes = $_POST['ProductManufacturer'];
+                    $model_product_manufacturer->product_id = $model->id;
+                    $model_product_manufacturer->save();
+                }
+
+                $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
+                $uploaded_files = $upload_model->upload('product_image');
+
+                if (!empty($uploaded_files)) {
+
+                    foreach ($uploaded_files as $uploaded_file) {
+
+                        $resource = new Resources();
+                        $resource->attributes = $uploaded_file;
+                        $resource->beforeSave(TRUE);
+
+                        if ($resource->validate() && $resource->save()) {
+                            $resource_product = new ResourcesProduct();
+                            $resource_product->product_id = $model->id;
+                            $resource_product->resources_id = $resource->id;
+                            $resource_product->save();
+                        }
+                    }
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                         'model' => $model,
+                        'model_manufacturer' => $model_manufacturer,
+                        'model_product_manufacturer' => $model_product_manufacturer,
                         'model_category' => $model_category,
                         'model_product_category' => $model_product_category,
                         'upload_model' => $upload_model,
             ]);
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            
         }
     }
 

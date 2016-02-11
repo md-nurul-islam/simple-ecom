@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
 
@@ -14,11 +13,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?=
+    $this->render('_form', [
         'model' => $model,
+        'model_manufacturer' => $model_manufacturer,
+        'model_product_manufacturer' => $model_product_manufacturer,
         'model_category' => $model_category,
         'model_product_category' => $model_product_category,
         'upload_model' => $upload_model,
-    ]) ?>
+    ])
+    ?>
 
 </div>
