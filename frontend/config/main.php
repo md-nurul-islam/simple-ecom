@@ -42,7 +42,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => false,
-            'rules' => []
+            'rules' => [
+                '' => 'site/index',
+            ]
         ],
     ],
     'params' => $params,
