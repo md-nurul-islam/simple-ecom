@@ -25,7 +25,7 @@ class UploadForm extends Model {
         if ($this->validate()) {
 
             $app_root = Yii::getAlias('@approot');
-            $upload_path = "{$app_root}/backend/web/uploads/{$upload_dir}/";
+            $upload_path = "{$app_root}/uploads/{$upload_dir}/";
             if (!file_exists($upload_path)) {
                 BaseFileHelper::createDirectory($upload_path, 0777, TRUE);
             } else {

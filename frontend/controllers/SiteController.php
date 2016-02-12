@@ -29,12 +29,12 @@ class SiteController extends Controller {
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'cart', 'shop', 'category', 'manufacturer'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'checkout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -71,6 +71,26 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         return $this->render('index');
+    }
+    
+    public function actionCategory() {
+        var_dump('category');
+        Yii::$app->end();
+    }
+    
+    public function actionManufacturer() {
+        var_dump('manufacturer');
+        Yii::$app->end();
+    }
+
+    public function actionCart() {
+        var_dump('cart');
+        Yii::$app->end();
+    }
+    
+    public function actionShop() {
+        var_dump('shop');
+        Yii::$app->end();
     }
 
     /**

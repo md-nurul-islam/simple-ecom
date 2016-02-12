@@ -44,6 +44,7 @@ return [
             'enableStrictParsing' => false,
             'rules' => [
                 '' => 'site/index',
+                '/cart' => 'site/cart',
             ]
         ],
     ],

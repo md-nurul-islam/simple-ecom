@@ -161,7 +161,7 @@ echo newerton\fancybox\FancyBox::widget([
                             <div class="info-wrapper">
 
                                 <?php
-                                $image_dir = Url::to('/backend/web/uploads/product_image/');
+                                $image_dir = Url::to('/uploads/product_image/');
 
                                 if (!empty($model->resourcesProducts)) {
                                     $resourcesProducts = $model->resourcesProducts;
