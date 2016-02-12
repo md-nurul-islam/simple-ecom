@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\db\Query;
 use common\models\Product;
 use common\models\ProductCategory;
 use common\models\Category;
@@ -50,7 +51,7 @@ class ProductController extends Controller {
      */
     public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
-            'query' => Product::find(),
+            'query' => Product::find()->where('status = :status', [':status' => 1]),
         ]);
 
         return $this->render('index', [
@@ -157,11 +158,71 @@ class ProductController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model_category = new Category();
+        $model_product_category = new ProductCategory();
+
+        $model_manufacturer = new Manufacturer();
+        $model_product_manufacturer = new ProductManufacturer();
+
+        $upload_model = new UploadForm;
+        $resource = new Resources();
+        $resource_product = new ResourcesProduct();
+
+        if (isset($_POST['Product']) && !empty($_POST['Product'])) {
+
+            $model->attributes = $_POST['Product'];
+            $model->beforeSave(FALSE);
+
+            if ($model->validate() && $model->save()) {
+
+                if (empty($_POST['ProductCategory']['category_id'])) {
+                    $model_product_category->addError('category_id', 'No category selected.');
+                } else {
+
+                    (new Query)->createCommand()->delete(ProductCategory::tableName(), ['product_id' => $model->id])->execute();
+                    foreach ($_POST['ProductCategory']['category_id'] as $category) {
+                        $model_product_category = new ProductCategory();
+                        $model_product_category->product_id = $model->id;
+                        $model_product_category->category_id = $category;
+                        $model_product_category->save();
+                    }
+                }
+
+                if (isset($_POST['ProductManufacturer']) && !empty($_POST['ProductManufacturer']['manufacturer_id'])) {
+                    $model_product_manufacturer->attributes = $_POST['ProductManufacturer'];
+                    $model_product_manufacturer->product_id = $model->id;
+                    $model_product_manufacturer->save();
+                }
+                
+                $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
+                $uploaded_files = $upload_model->upload('product_image');
+
+                if (!empty($uploaded_files)) {
+
+                    foreach ($uploaded_files as $uploaded_file) {
+
+                        $resource = new Resources();
+                        $resource->attributes = $uploaded_file;
+                        $resource->beforeSave(FALSE);
+
+                        if ($resource->validate() && $resource->save()) {
+                            $resource_product = new ResourcesProduct();
+                            $resource_product->product_id = $model->id;
+                            $resource_product->resources_id = $resource->id;
+                            $resource_product->save();
+                        }
+                    }
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                         'model' => $model,
+                        'model_manufacturer' => $model_manufacturer,
+                        'model_product_manufacturer' => $model_product_manufacturer,
+                        'model_category' => $model_category,
+                        'model_product_category' => $model_product_category,
+                        'upload_model' => $upload_model,
             ]);
         }
     }
@@ -173,8 +234,9 @@ class ProductController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->status = 0;
+        $model->update();
         return $this->redirect(['index']);
     }
 

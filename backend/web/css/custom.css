@@ -1,0 +1,35 @@
+.view .border-right {
+    border-right: 1px solid #dddddd;
+}
+.view .label-wrapper, .view .info-wrapper {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    float: left;
+}
+.view .label-wrapper {
+    width: 25%;
+}
+.view .info-wrapper {
+    padding-left: 15px;
+    width: 75%;
+}
+.view .list-group-item {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.view .barcode-wrapper, .barcode-content-for-modal {
+    display: none;
+}
+.view .barcode-container {
+    padding: 15px 0;
+}
+.abs-middle {
+    text-align: center;
+    vertical-align: middle !important;
+}
+.info-wrapper a img {
+    margin: 0 5px;
+}
+.bottom-padding-100 {
+    padding-bottom: 65px !important;
+}

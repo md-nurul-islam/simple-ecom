@@ -19,21 +19,19 @@ use Yii;
  *
  * @property Member $member
  */
-class MemberProfile extends \yii\db\ActiveRecord
-{
+class MemberProfile extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'member_profile';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'address', 'contact_number', 'member_id', 'created_date', 'updated_date'], 'required'],
             [['address'], 'string'],
@@ -48,8 +46,7 @@ class MemberProfile extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
@@ -66,8 +63,25 @@ class MemberProfile extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMember()
-    {
+    public function getMember() {
         return $this->hasOne(Member::className(), ['id' => 'member_id']);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+                $this->status = 1;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

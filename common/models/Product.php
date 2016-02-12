@@ -53,7 +53,7 @@ class Product extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Product Name'),
+            'name' => Yii::t('app', 'Product Slug'),
             'display_name' => Yii::t('app', 'Display Name'),
             'description' => Yii::t('app', 'Description'),
             'purchase_price' => Yii::t('app', 'Purchase Price'),

@@ -15,12 +15,12 @@ class m160208_114446_create_member_table extends Migration {
         $this->createTable('{{%member}}', [
             'id' => $this->primaryKey(),
             'email' => $this->string()->notNull()->unique(),
-            'password_salt' => $this->string(32)->notNull(),
+            'auth_key' => $this->string(32)->notNull(),
             'password_hash' => $this->string()->notNull(),
             'password_reset_token' => $this->string()->unique(),
-            'status' => $this->smallInteger()->notNull()->defaultValue(10),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_date' => 'DATETIME NOT NULL',
+            'updated_date' => 'DATETIME NOT NULL',
+            'status' => 'TINYINT(1) NOT NULL DEFAULT 1',
                 ], $tableOptions);
     }
 
