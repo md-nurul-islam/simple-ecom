@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  */
 class Member extends ActiveRecord implements IdentityInterface {
 
+    public $name;
     /**
      * @inheritdoc
      */
@@ -89,6 +90,10 @@ class Member extends ActiveRecord implements IdentityInterface {
         } else {
             return false;
         }
+    }
+    
+    public static function findByEmail($email) {
+        return static::find()->with('memberProfiles')->where(['email' => $email])->one();
     }
 
     public function setPassword($password) {

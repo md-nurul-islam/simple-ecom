@@ -15,6 +15,14 @@ return [
             'identityClass' => 'backend\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['site/login'],
+            'identityCookie' => [
+                'name' => '_backend', // unique for backend
+                'path' => '/backend/web'  // correct path for the backend app.
+            ]
+        ],
+        'session' => [
+            'name' => '_backendSessionId', // unique for backend
+            'savePath' => __DIR__ . '/../runtime', // a temporary folder on backend
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -32,7 +40,7 @@ return [
             'baseUrl' => '/admin',
         ],
         'urlManager' => [
-            'baseUrl' => '/admin/',
+            'baseUrl' => '/admin',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => []

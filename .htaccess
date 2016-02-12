@@ -7,6 +7,9 @@ RewriteEngine on
 # End the processing, if a rewrite already occurred
 RewriteRule ^(frontend|admin)/web/ - [L]
 
+RewriteCond %{REQUEST_URI} "/uploads/"
+RewriteRule (.*) $1 [L]
+
 RewriteCond %{REQUEST_URI} ^/admin/$
 RewriteRule ^(admin)/$ /$1 [R=301,L]
 RewriteCond %{REQUEST_URI} ^/admin

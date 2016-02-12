@@ -11,8 +11,16 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'user' => [
-            'identityClass' => 'backend\models\User',
+            'identityClass' => 'common\models\Member',
             'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => '_frontend', // unique for frontend
+                'path' => '/frontend/web'  // correct path for the frontend app.
+            ]
+        ],
+        'session' => [
+            'name' => '_frontendSessionId', // unique for frontend
+            'savePath' => __DIR__ . '/../runtime', // a temporary folder on frontend
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -27,13 +35,13 @@ return [
             'errorAction' => 'site/error',
         ],
         'request' => [
-            'baseUrl' => '/',
+            'baseUrl' => '',
         ],
         'urlManager' => [
-            'baseUrl' => '/',
+            'baseUrl' => '',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-//            'enableStrictParsing' => false,
+            'enableStrictParsing' => false,
             'rules' => []
         ],
     ],
