@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "product".
@@ -13,18 +14,19 @@ use Yii;
  * @property string $description
  * @property string $purchase_price
  * @property string $selling_price
+ * @property integer $in_home_slider
+ * @property integer $top_rated
  * @property integer $is_private
  * @property string $created_date
  * @property string $updated_date
  * @property integer $status
  *
  * @property Cart[] $carts
- * @property Cart[] $carts0
  * @property ProductCategory[] $productCategories
  * @property ProductManufacturer[] $productManufacturers
  * @property ResourcesProduct[] $resourcesProducts
  */
-class Product extends \yii\db\ActiveRecord {
+class Product extends ActiveRecord {
 
     /**
      * @inheritdoc
@@ -41,7 +43,7 @@ class Product extends \yii\db\ActiveRecord {
             [['name', 'created_date', 'updated_date'], 'required'],
             [['description'], 'string'],
             [['purchase_price', 'selling_price'], 'number'],
-            [['is_private', 'status'], 'integer'],
+            [['in_home_slider','top_rated','is_private', 'status'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['name', 'display_name'], 'string', 'max' => 255]
         ];
@@ -53,12 +55,14 @@ class Product extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Product Slug'),
-            'display_name' => Yii::t('app', 'Display Name'),
+            'name' => Yii::t('app', 'Slug'),
+            'display_name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
-            'purchase_price' => Yii::t('app', 'Purchase Price'),
-            'selling_price' => Yii::t('app', 'Selling Price'),
-            'is_private' => Yii::t('app', 'Is Private'),
+            'purchase_price' => Yii::t('app', 'Purchased At'),
+            'selling_price' => Yii::t('app', 'Sale At'),
+            'in_home_slider' => Yii::t('app', 'Show at Home Slider'),
+            'top_rated' => Yii::t('app', 'Show at Home Top 10'),
+            'is_private' => Yii::t('app', 'Private'),
             'created_date' => Yii::t('app', 'Created Date'),
             'updated_date' => Yii::t('app', 'Updated Date'),
             'status' => Yii::t('app', 'Status'),
@@ -109,5 +113,9 @@ class Product extends \yii\db\ActiveRecord {
             return false;
         }
     }
-
+    
+    public static function find() {
+        return new ProductQuery(get_called_class());
+    }
+    
 }

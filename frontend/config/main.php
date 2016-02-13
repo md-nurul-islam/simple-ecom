@@ -41,10 +41,11 @@ return [
             'baseUrl' => '',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'rules' => [
                 '' => 'site/index',
-                '/cart' => 'site/cart',
+                '/<action>' => 'site/<action>',
+                '/<item>/<name:\w+>' => 'site/item',
             ]
         ],
     ],

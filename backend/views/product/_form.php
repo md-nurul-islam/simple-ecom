@@ -6,6 +6,9 @@ use common\models\Category;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 
+/* TinyMCE */
+use dosamigos\tinymce\TinyMce;
+
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
 /* @var $form yii\widgets\ActiveForm */
@@ -28,7 +31,7 @@ use yii\helpers\ArrayHelper;
                 }
                 $model_product_category->category_id = $data_product_categories;
             }
-            
+
             echo Select2::widget([
                 'model' => $model_product_category,
                 'attribute' => 'category_id',
@@ -48,7 +51,7 @@ use yii\helpers\ArrayHelper;
     </div>
 
     <?php
-    $data_manufacturer = ArrayHelper::map($model_manufacturer::find()->where(['status' => 0])->asArray()->all(), 'id', 'name');
+    $data_manufacturer = ArrayHelper::map($model_manufacturer::find()->where(['status' => 1])->asArray()->all(), 'id', 'name');
 
     if (!empty($model->id) && !empty($model->productManufacturers)) {
         $model_product_manufacturer->manufacturer_id = $model->productManufacturers[0]->manufacturer_id;
@@ -63,13 +66,36 @@ use yii\helpers\ArrayHelper;
 
     <?php echo $form->field($model, 'display_name')->textInput(['maxlength' => true]); ?>
 
-    <?php echo $form->field($model, 'description')->textarea(['rows' => 6]); ?>
 
-    <?php echo $form->field($upload_model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']); ?>
+    <?=
+    $form->field($model, 'description')->widget(TinyMce::className(), [
+        'options' => ['rows' => 6],
+        'language' => 'en_CA',
+        'clientOptions' => [
+            'menu' => [
+            ],
+            'plugins' => [
+                "advlist autolink lists link charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify bullist numlist | outdent indent | link code"
+        ]
+    ]);
+    ?>
 
+    <?php // echo $form->field($model, 'description')->textarea(['rows' => 6]);  ?>
+
+    <?php if(empty($model->id)) { ?>
+        <?php echo $form->field($upload_model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']); ?>
+    <?php } ?>
     <?php echo $form->field($model, 'purchase_price')->textInput(['maxlength' => true]); ?>
 
     <?php echo $form->field($model, 'selling_price')->textInput(['maxlength' => true]); ?>
+
+    <?php echo $form->field($model, 'in_home_slider')->checkbox(); ?>
+
+    <?php echo $form->field($model, 'top_rated')->checkbox(); ?>
 
     <?php echo $form->field($model, 'is_private')->checkbox(); ?>
 

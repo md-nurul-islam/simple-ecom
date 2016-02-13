@@ -13,6 +13,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\Product;
 
 /**
  * Site controller
@@ -29,7 +30,7 @@ class SiteController extends Controller {
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['signup', 'cart', 'shop', 'category', 'manufacturer'],
+                        'actions' => ['signup', 'cart', 'shop', 'category', 'manufacturer', 'item'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -70,7 +71,20 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        return $this->render('index');
+        
+        $home_slider_product = Product::find()->getHomeSliderProduct()->all();
+        $top_ten_products = Product::find()->getLatestTenProducts()->all();
+        
+        return $this->render('index', [
+            'home_slider_product' => $home_slider_product,
+            'top_ten_products' => $top_ten_products,
+        ]);
+    }
+    
+    public function actionItem($name = '') {
+        
+        var_dump($name);
+        Yii::$app->end();
     }
     
     public function actionCategory() {

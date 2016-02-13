@@ -52,6 +52,9 @@ class ProductController extends Controller {
     public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
             'query' => Product::find()->where('status = :status', [':status' => 1]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         return $this->render('index', [
@@ -115,6 +118,7 @@ class ProductController extends Controller {
                     $model_product_manufacturer->product_id = $model->id;
                     $model_product_manufacturer->save();
                 }
+
 
                 $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
                 $uploaded_files = $upload_model->upload('product_image');
@@ -189,30 +193,35 @@ class ProductController extends Controller {
                 }
 
                 if (isset($_POST['ProductManufacturer']) && !empty($_POST['ProductManufacturer']['manufacturer_id'])) {
+                    (new Query)->createCommand()->delete(ProductManufacturer::tableName(), ['product_id' => $model->id])->execute();
                     $model_product_manufacturer->attributes = $_POST['ProductManufacturer'];
                     $model_product_manufacturer->product_id = $model->id;
                     $model_product_manufacturer->save();
                 }
-                
-                $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
-                $uploaded_files = $upload_model->upload('product_image');
 
-                if (!empty($uploaded_files)) {
+                if (isset($_FILES['UploadForm']) && !empty($_FILES['UploadForm'])) {
 
-                    foreach ($uploaded_files as $uploaded_file) {
+                    $upload_model->imageFiles = UploadedFile::getInstances($upload_model, 'imageFiles');
+                    $uploaded_files = $upload_model->upload('product_image');
 
-                        $resource = new Resources();
-                        $resource->attributes = $uploaded_file;
-                        $resource->beforeSave(FALSE);
+                    if (!empty($uploaded_files)) {
 
-                        if ($resource->validate() && $resource->save()) {
-                            $resource_product = new ResourcesProduct();
-                            $resource_product->product_id = $model->id;
-                            $resource_product->resources_id = $resource->id;
-                            $resource_product->save();
+                        foreach ($uploaded_files as $uploaded_file) {
+
+                            $resource = new Resources();
+                            $resource->attributes = $uploaded_file;
+                            $resource->beforeSave(FALSE);
+
+                            if ($resource->validate() && $resource->save()) {
+                                $resource_product = new ResourcesProduct();
+                                $resource_product->product_id = $model->id;
+                                $resource_product->resources_id = $resource->id;
+                                $resource_product->save();
+                            }
                         }
                     }
                 }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

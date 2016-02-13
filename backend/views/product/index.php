@@ -17,22 +17,48 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo Html::a(Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php echo GridView::widget([
+    <?php
+    echo GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'name',
             'display_name',
-            'description:ntext',
+            'name',
             'purchase_price',
-            // 'selling_price',
-            // 'is_private',
+            'selling_price',
+            [
+                'attribute' => 'in_home_slider',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $btn_class = ($model->in_home_slider) ? 'success' : 'danger';
+                    $yes_no = common\helpers\Custom::getYesNoArray()[$model->in_home_slider];
+                    return "<button class=\"btn btn-{$btn_class}\" type=\"button\">{$yes_no}</button>";
+                }
+            ],
+            [
+                'attribute' => 'top_rated',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $btn_class = ($model->top_rated) ? 'success' : 'danger';
+                    $yes_no = common\helpers\Custom::getYesNoArray()[$model->top_rated];
+                    return "<button class=\"btn btn-{$btn_class}\" type=\"button\">{$yes_no}</button>";
+                }
+            ],
+            [
+                'attribute' => 'is_private',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $btn_class = (!$model->is_private) ? 'success' : 'danger';
+                    $yes_no = common\helpers\Custom::getYesNoArray()[$model->is_private];
+                    return "<button class=\"btn btn-{$btn_class}\" type=\"button\">{$yes_no}</button>";
+                }
+            ],
             // 'created_date',
             // 'updated_date',
             // 'status',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 </div>

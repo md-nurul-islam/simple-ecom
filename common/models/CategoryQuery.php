@@ -9,13 +9,15 @@ class CategoryQuery extends ActiveQuery {
 
     public function parentCategoryForDropdown() {
         $this->andWhere("parent_catrgory_id IS NULL OR parent_catrgory_id = '' OR parent_catrgory_id = '0' ");
+        $this->andWhere('status =:status', [':status' => 1]);
         return $this;
     }
 
     public function getCategoryForSelect2() {
         
+        $data = $this->andWhere('status =:status', [':status' => 1])->all();
         $response = [];
-        foreach ($this->all() as $category) {
+        foreach ($data as $category) {
             $response[$category->id] = $category->display_name;
         }
         

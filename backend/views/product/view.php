@@ -88,7 +88,6 @@ echo newerton\fancybox\FancyBox::widget([
                             </div>
                         </li>
 
-
                         <li class="list-group-item clearfix">
                             <div class="label-wrapper border-right">
                                 <label><?php echo \common\models\Manufacturer::attributeLabels()['name']; ?></label>
@@ -128,11 +127,11 @@ echo newerton\fancybox\FancyBox::widget([
                         </li>
 
                         <li class="list-group-item clearfix">
-                            <div class="label-wrapper border-right">
+                            <div class="label-wrapper border-right bottom-padding-100">
                                 <label><?php echo $model->attributeLabels()['description']; ?></label>
                             </div>
-                            <div class="info-wrapper">
-                                <?php echo Html::encode($model->description); ?>
+                            <div class="info-wrapper product-description">
+                                <?php echo $model->description; ?>
                             </div>
                         </li>
 
@@ -181,11 +180,32 @@ echo newerton\fancybox\FancyBox::widget([
 
                         <li class="list-group-item clearfix">
                             <div class="label-wrapper border-right">
+                                <label for=""><?php echo $model->attributeLabels()['in_home_slider']; ?></label>
+                            </div>
+                            <div style="padding-bottom: 5px; padding-top: 6px;" class="info-wrapper">
+                                <button class="btn btn-<?php echo ($model->in_home_slider) ? 'success' : 'danger'; ?>" type="button">
+                                    <?php echo common\helpers\Custom::getYesNoArray()[$model->in_home_slider]; ?>
+                                </button>
+                            </div>
+                        </li>
+                        
+                        <li class="list-group-item clearfix">
+                            <div class="label-wrapper border-right">
+                                <label for=""><?php echo $model->attributeLabels()['top_rated']; ?></label>
+                            </div>
+                            <div style="padding-bottom: 5px; padding-top: 6px;" class="info-wrapper">
+                                <button class="btn btn-<?php echo ($model->top_rated) ? 'success' : 'danger'; ?>" type="button">
+                                    <?php echo common\helpers\Custom::getYesNoArray()[$model->top_rated]; ?>
+                                </button>
+                            </div>
+                        </li>
+                        <li class="list-group-item clearfix">
+                            <div class="label-wrapper border-right">
                                 <label for=""><?php echo $model->attributeLabels()['is_private']; ?></label>
                             </div>
                             <div style="padding-bottom: 5px; padding-top: 6px;" class="info-wrapper">
                                 <button class="btn btn-<?php echo (!$model->is_private) ? 'success' : 'danger'; ?>" type="button">
-                                    <?php echo common\helpers\Custom::getIsPrivateArray()[$model->is_private]; ?>
+                                    <?php echo common\helpers\Custom::getYesNoArray()[$model->is_private]; ?>
                                 </button>
                             </div>
                         </li>

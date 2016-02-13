@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "category".
@@ -17,7 +18,7 @@ use Yii;
  *
  * @property ProductCategory[] $productCategories
  */
-class Category extends \yii\db\ActiveRecord {
+class Category extends ActiveRecord {
 
     /**
      * @inheritdoc
@@ -32,7 +33,7 @@ class Category extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['name', 'created_date', 'updated_date'], 'required'],
-            [['name'], 'unique'],
+            [['name'], 'customUnique'],
             [['parent_catrgory_id', 'status'], 'integer'],
             [['created_date', 'updated_date'], 'safe'],
             [['name'], 'string', 'max' => 50],
@@ -53,6 +54,19 @@ class Category extends \yii\db\ActiveRecord {
             'updated_date' => Yii::t('app', 'Updated Date'),
             'status' => Yii::t('app', 'Status'),
         ];
+    }
+
+    public function customUnique() {
+
+        $data = $this->find()->where('status =:s AND name = :n AND parent_catrgory_id = :p', [
+            ':s' => 1,
+            ':n' => $this->name,
+            ':p' => $this->parent_catrgory_id,
+        ])->one();
+        
+        if(!empty($data)) {
+            $this->addError('name', "{$this->name} alreay exists.");
+        }
     }
 
     /**

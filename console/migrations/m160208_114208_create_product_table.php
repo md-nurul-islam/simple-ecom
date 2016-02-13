@@ -20,6 +20,8 @@ class m160208_114208_create_product_table extends Migration {
             'description' => 'LONGTEXT NULL DEFAULT NULL',
             'purchase_price' => 'DECIMAL(13,2) NOT NULL DEFAULT 0.00',
             'selling_price' => 'DECIMAL(13,2) NOT NULL DEFAULT 0.00',
+            'in_home_slider' => 'TINYINT(1) NOT NULL DEFAULT 0',
+            'top_rated' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'is_private' => 'TINYINT(1) NOT NULL DEFAULT 0',
             'created_date' => 'DATETIME NOT NULL',
             'updated_date' => 'DATETIME NOT NULL',

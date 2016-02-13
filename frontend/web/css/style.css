@@ -192,6 +192,11 @@ z-index: 9;
   top: 0;
   width: 100%;
 }
+.slide-background {
+    background-size: cover;
+    background-repeat: no-repeat !important;
+}
+
 .slide-one {background-image: url(img/slide-1.jpg)}
 .slide-two {background-image: url(img/slide-2.jpg)}
 .slide-three {background-image: url(img/slide-3.jpg)}
@@ -244,6 +249,7 @@ z-index: 9;
 .promo-area .zigzag-bottom, .brands-area .zigzag-bottom{background: #fff}
 .single-promo {
     border: 1px solid #17a78b;
+    cursor: pointer;
     font-size: 25px;
     font-weight: 200;
     padding: 20px 10px;
