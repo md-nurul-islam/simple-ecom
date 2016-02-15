@@ -389,7 +389,7 @@ class SiteController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-
+                    $user_id = Yii::$app->user->identity->id;
                     $cookies = Yii::$app->response->cookies;
                     if (isset($_COOKIE['cart_' . $user_id])) {
                         return $this->redirect('/cart');
