@@ -11,20 +11,24 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?php echo Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php // echo Html::a(Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
+    <?php echo
+    GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'bill_number',
-            'member_id',
+            [
+                'attribute' => 'member.memberProfiles.name',
+                'value' => function ($model) {
+                    return $model->member->memberProfiles[0]->name;
+                }
+            ],
             'total_amount',
             'total_payable',
             // 'total_paid',
@@ -34,10 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'has_due',
             // 'created_date',
             // 'updated_date',
-            // 'status',
-
+            [
+                'attribute' => 'order_status',
+                'value' => function ($model) {
+                    return common\helpers\Custom::getOrderStatusArray()[$model->status];;
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); ?>
+    ]);
+    ?>
 
 </div>

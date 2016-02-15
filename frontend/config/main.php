@@ -44,8 +44,11 @@ return [
             'enableStrictParsing' => true,
             'rules' => [
                 '' => 'site/index',
+                '/member/<action>' => 'member/<action>',
+                '/member/<action>/<id:\d+>' => 'member/<action>/id',
                 '/<action>' => 'site/<action>',
-                '/<item>/<name:\w+>' => 'site/item',
+                '/<action>/<id:\d+>/<name:\w+>' => 'site/<action>/id/name',
+//                '/<item>/<name:\w+>' => 'site/item',
             ]
         ],
     ],

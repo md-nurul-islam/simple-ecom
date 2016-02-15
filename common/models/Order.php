@@ -26,21 +26,19 @@ use Yii;
  * @property Member $member
  * @property Transaction[] $transactions
  */
-class Order extends \yii\db\ActiveRecord
-{
+class Order extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'order';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['bill_number', 'member_id', 'created_date', 'updated_date'], 'required'],
             [['bill_number', 'member_id', 'has_due', 'status'], 'integer'],
@@ -52,12 +50,11 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
-            'bill_number' => Yii::t('app', 'Bill Number'),
-            'member_id' => Yii::t('app', 'Member ID'),
+            'bill_number' => Yii::t('app', 'Order ID'),
+            'member_id' => Yii::t('app', 'Member Name'),
             'total_amount' => Yii::t('app', 'Total Amount'),
             'total_payable' => Yii::t('app', 'Total Payable'),
             'total_paid' => Yii::t('app', 'Total Paid'),
@@ -74,32 +71,36 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCarts()
-    {
+    public function getCarts() {
         return $this->hasMany(Cart::className(), ['order_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCarts0()
-    {
-        return $this->hasMany(Cart::className(), ['order_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMember()
-    {
+    public function getMember() {
         return $this->hasOne(Member::className(), ['id' => 'member_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTransactions()
-    {
+    public function getTransactions() {
         return $this->hasMany(Transaction::className(), ['order_id' => 'id']);
     }
+
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+                $this->status = 0;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

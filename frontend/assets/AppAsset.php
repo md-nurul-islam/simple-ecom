@@ -26,11 +26,13 @@ class AppAsset extends AssetBundle
         'css/responsive.css',
     ];
     public $js = [
+        'js/cookie.js',
         'js/owl.carousel.min.js',
         'js/jquery.easing.1.3.min.js',
         'js/jquery.sticky.js',
         'js/main.js',
         'js/bootstrap.min.js',
+        'js/cart.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

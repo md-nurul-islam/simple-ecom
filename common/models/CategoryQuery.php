@@ -28,5 +28,10 @@ class CategoryQuery extends ActiveQuery {
         $this->where(["id" => $id]);
         return $this;
     }
+    
+    public function getChildCategories($parent_id) {
+        $this->where(["parent_catrgory_id" => $parent_id]);
+        return $this;
+    }
 
 }

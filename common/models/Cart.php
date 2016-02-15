@@ -24,21 +24,19 @@ use Yii;
  * @property Order $order0
  * @property Product $product0
  */
-class Cart extends \yii\db\ActiveRecord
-{
+class Cart extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'cart';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['order_id', 'product_id', 'created_date', 'updated_date'], 'required'],
             [['order_id', 'product_id', 'quantity_sold'], 'integer'],
@@ -50,8 +48,7 @@ class Cart extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'order_id' => Yii::t('app', 'Order ID'),
@@ -70,32 +67,28 @@ class Cart extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrder()
-    {
+    public function getOrder() {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct()
-    {
+    public function getProduct() {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrder0()
-    {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+    
+    public function beforeSave($insert) {
+        $now = date('Y-m-d H:i:s');
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->created_date = $now;
+            }
+            $this->updated_date = $now;
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProduct0()
-    {
-        return $this->hasOne(Product::className(), ['id' => 'product_id']);
-    }
 }

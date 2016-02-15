@@ -24,6 +24,7 @@ class m160208_114456_create_order_table extends Migration {
             'total_due' => 'DECIMAL(13,2) NOT NULL DEFAULT 0.00',
             'total_changes' => 'DECIMAL(13,2) NOT NULL DEFAULT 0.00',
             'has_due' => 'TINYINT(1) NOT NULL DEFAULT 1',
+            'payment_method' => 'TINYINT(2) NOT NULL DEFAULT 0',
             'created_date' => 'DATETIME NOT NULL',
             'updated_date' => 'DATETIME NOT NULL',
             'status' => 'TINYINT(1) NOT NULL DEFAULT 1',

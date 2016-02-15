@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
+use common\helpers\Custom;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Order */
@@ -10,34 +11,20 @@ use yii\widgets\ActiveForm;
 
 <div class="order-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
 
-    <?= $form->field($model, 'bill_number')->textInput() ?>
+    <?php echo $form->field($model, 'bill_number')->textInput(['disabled' => true]); ?>
 
-    <?= $form->field($model, 'member_id')->textInput() ?>
+    <?php echo $form->field($model, 'total_amount')->textInput(['maxlength' => true, 'disabled' => true]); ?>
 
-    <?= $form->field($model, 'total_amount')->textInput(['maxlength' => true]) ?>
+    <?php echo $form->field($model, 'total_payable')->textInput(['maxlength' => true, 'disabled' => true]); ?>
 
-    <?= $form->field($model, 'total_payable')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'total_paid')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'total_advance')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'total_due')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'total_changes')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'has_due')->textInput() ?>
-
-    <?= $form->field($model, 'created_date')->textInput() ?>
-
-    <?= $form->field($model, 'updated_date')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?php
+    echo $form->field($model, 'status')->dropDownList(Custom::getOrderStatusArray());
+    ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Save'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

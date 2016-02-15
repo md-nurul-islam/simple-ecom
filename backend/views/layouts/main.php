@@ -28,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Simple E-Commerce Admin',
+        'brandLabel' => 'yiiCommerce Admin',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -40,6 +40,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Manufacturer', 'url' => ['/manufacturer']];
         $menuItems[] = ['label' => 'Category', 'url' => ['/category']];
         $menuItems[] = ['label' => 'Product', 'url' => ['/product']];
+        $menuItems[] = ['label' => 'Orders', 'url' => ['/order']];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
@@ -64,7 +65,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?php echo date('Y') ?></p>
+        <p class="pull-left">&copy; webdev.nislam@gmail.com <?php echo date('Y') ?></p>
 
         <p class="pull-right"><?php echo Yii::powered() ?></p>
     </div>

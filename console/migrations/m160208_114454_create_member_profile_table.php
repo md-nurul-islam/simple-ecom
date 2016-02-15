@@ -19,6 +19,7 @@ class m160208_114454_create_member_profile_table extends Migration {
             'address' => 'LONGTEXT NOT NULL',
             'contact_number' => 'VARCHAR(30) NOT NULL',
             'avatar' => 'VARCHAR(255) NULL',
+            'max_cart_amount' => 'DECIMAL( 13, 2 ) NULL DEFAULT NULL',
             'member_id' => 'INT(11) NOT NULL',
             'created_date' => 'DATETIME NOT NULL',
             'updated_date' => 'DATETIME NOT NULL',

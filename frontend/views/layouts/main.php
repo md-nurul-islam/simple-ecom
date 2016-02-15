@@ -10,10 +10,12 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\assets\GoogleFontsAsset;
 use common\widgets\Alert;
+use common\models\Category;
+use common\models\Manufacturer;
 
 AppAsset::register($this);
 GoogleFontsAsset::register($this);
-$this->title = 'sCommerce';
+$this->title = 'yiiCommerce';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,7 +28,10 @@ $this->title = 'sCommerce';
         <?php $this->head() ?>
     </head>
     <body>
-        <?php $this->beginBody() ?>
+        <?php $this->beginBody(); ?>
+        <?php if (!Yii::$app->user->isGuest) { ?>
+            <?php echo Html::input('hidden', 'user_id', Yii::$app->user->identity->id, ['id' => 'user_id']); ?>
+        <?php } ?>
 
         <div class="header-area">
             <div class="container">
@@ -34,10 +39,17 @@ $this->title = 'sCommerce';
                     <div class="col-md-8">
                         <div class="user-menu">
                             <ul>
-                                <li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
-                                <li><a href="cart.html"><i class="fa fa-user"></i> My Cart</a></li>
-                                <li><a href="checkout.html"><i class="fa fa-user"></i> Checkout</a></li>
-                                <?php echo Html::a('<i class="fa fa-user"></i>&nbsp;&nbsp;Login', Url::to(['/site/login'])); ?>
+                                <li><?php echo Html::a('<i class="fa fa-user"></i>My Account', Url::to(['/member/profile'])); ?>
+                                <li><a href="/cart"><i class="fa fa-cart-plus"></i> My Cart</a></li>
+                                <?php
+                                $login_out_text = 'Login';
+                                $login_out_url = ['/site/login'];
+                                if (!Yii::$app->user->isGuest) {
+                                    $login_out_text = 'Logout';
+                                    $login_out_url = ['/site/logout'];
+                                }
+                                ?>
+                                <li><?php echo Html::a("<i class=\"fa fa-user\"></i>{$login_out_text}", Url::to($login_out_url), ['data-method' => 'post']); ?></li>
                             </ul>
                         </div>
                     </div>
@@ -50,13 +62,15 @@ $this->title = 'sCommerce';
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="logo">
-                            <h1><?php echo Html::a('s<span>Commerce</span>', Url::to([''])); ?></h1>
+                            <h1><?php echo Html::a('yii<span>Commerce</span>', Url::to([''])); ?></h1>
                         </div>
                     </div>
 
                     <div class="col-sm-6">
                         <div class="shopping-item">
-                            <?php echo Html::a('Cart - <span class="cart-amunt">$800</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">8</span>', Url::to(['/cart'])); ?>
+
+                            <?php echo Html::a('Cart - <span class="cart-amunt">BDT 0.00</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">0</span>', Url::to(['/cart'])); ?>
+
                         </div>
                     </div>
                 </div>
@@ -76,36 +90,48 @@ $this->title = 'sCommerce';
                     </div> 
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><?php echo Html::a('Home', Url::to(['/'])); ?></li>
-                            <li class="dropdown">
+                            <li class="parent-menu"><?php echo Html::a('Home', Url::to(['/'])); ?></li>
+                            <li class="dropdown parent-menu">
                                 <?php
-                                echo Html::a('Category', Url::to(['#']), [
+                                echo Html::a('Category', Url::to(['/category']), [
                                     'data-toggle' => 'dropdown',
                                     'data-hover' => 'dropdown',
                                     'class' => 'dropdown-toggle'
                                 ]);
                                 ?>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">USD</a></li>
+                                <ul class="dropdown-menu list-group">
+                                    <?php
+                                    $categories = Category::find()->where('status = :s', [':s' => 1])->all();
+                                    foreach ($categories as $category) {
+                                        ?>
+                                        <li class="list-group-item">
+                                            <?php echo Html::a($category->display_name, Url::to(['/category', 'id' => $category->id, 'name' => Html::encode($category->name)])); ?>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown parent-menu">
                                 <?php
-                                echo Html::a('Manufacturer', Url::to(['#']), [
+                                echo Html::a('Manufacturer', Url::to(['/manufacturer']), [
                                     'data-toggle' => 'dropdown',
                                     'data-hover' => 'dropdown',
                                     'class' => 'dropdown-toggle'
                                 ]);
                                 ?>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">USD</a></li>
+                                <ul class="dropdown-menu list-group">
+                                    <?php
+                                    $manufacturers = Manufacturer::find()->where('status = :s', [':s' => 1])->all();
+                                    foreach ($manufacturers as $manufacturer) {
+                                        ?>
+                                        <li class="list-group-item">
+                                            <?php echo Html::a($manufacturer->name, Url::to(['/manufacturer', 'id' => $manufacturer->id, 'name' => Html::encode($manufacturer->name)])); ?>
+                                        </li>
+                                    <?php } ?>
                                 </ul>
                             </li>
-                            <li><?php echo Html::a('Shop', Url::to(['/shop'])); ?></li>
-                            <li><?php echo Html::a('Cart', Url::to(['/cart'])); ?></li>
-                            <li><?php echo Html::a('Checkout', Url::to(['/checkout'])); ?></li>
-
-                            <li><a href="#">Contact</a></li>
+                            <li class="parent-menu"><?php echo Html::a('Shop', Url::to(['/shop'])); ?></li>
+                            <li class="parent-menu"><?php echo Html::a('Cart', Url::to(['/cart'])); ?></li>
+                            <li class="parent-menu"><?php echo Html::a('Contact', Url::to(['/contact'])); ?></li>
                         </ul>
                     </div>  
                 </div>
@@ -120,8 +146,7 @@ $this->title = 'sCommerce';
                 <div class="row">
                     <div class="col-md-3 col-sm-6">
                         <div class="footer-about-us">
-                            <h2>e<span>Electronics</span></h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus vero quam laborum quas alias dolores blanditiis iusto consequatur, modi aliquid eveniet eligendi iure eaque ipsam iste, pariatur omnis sint! Suscipit, debitis, quisquam. Laborum commodi veritatis magni at?</p>
+                            <h2>yii<span>Commerce</span></h2>
                             <div class="footer-social">
                                 <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
                                 <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
@@ -136,40 +161,22 @@ $this->title = 'sCommerce';
                         <div class="footer-menu">
                             <h2 class="footer-wid-title">User Navigation </h2>
                             <ul>
-                                <li><a href="#">My account</a></li>
-                                <li><a href="#">Order history</a></li>
-                                <li><a href="#">Wishlist</a></li>
-                                <li><a href="#">Vendor contact</a></li>
-                                <li><a href="#">Front page</a></li>
-                            </ul>                        
+                                <li><?php echo Html::a('<i class="fa fa-user"></i>My Account', Url::to(['/member/profile'])); ?>
+                                <li><a href="/cart"><i class="fa fa-cart-plus"></i> My Cart</a></li>
+                                <?php
+                                $login_out_text = 'Login';
+                                $login_out_url = ['/site/login'];
+                                if (!Yii::$app->user->isGuest) {
+                                    $login_out_text = 'Logout';
+                                    $login_out_url = ['/site/logout'];
+                                }
+                                ?>
+                                <li><?php echo Html::a("<i class=\"fa fa-user\"></i>{$login_out_text}", Url::to($login_out_url), ['data-method' => 'post']); ?></li>
+                            </ul>                       
                         </div>
                     </div>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="footer-menu">
-                            <h2 class="footer-wid-title">Categories</h2>
-                            <ul>
-                                <li><a href="#">Mobile Phone</a></li>
-                                <li><a href="#">Home accesseries</a></li>
-                                <li><a href="#">LED TV</a></li>
-                                <li><a href="#">Computer</a></li>
-                                <li><a href="#">Gadets</a></li>
-                            </ul>                        
-                        </div>
-                    </div>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="footer-newsletter">
-                            <h2 class="footer-wid-title">Newsletter</h2>
-                            <p>Sign up to our newsletter and get exclusive deals you wont find anywhere else straight to your inbox!</p>
-                            <div class="newsletter-form">
-                                <form action="#">
-                                    <input type="email" placeholder="Type your email">
-                                    <input type="submit" value="Subscribe">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div> <!-- End footer top area -->
@@ -179,18 +186,10 @@ $this->title = 'sCommerce';
                 <div class="row">
                     <div class="col-md-8">
                         <div class="copyright">
-                            <p>&copy; 2015 eElectronics. All Rights Reserved. Coded with <i class="fa fa-heart"></i> by <a href="http://wpexpand.com" target="_blank">WP Expand</a></p>
+                            <p>&copy; 2016 yiiCommerce. All Rights Reserved. Coded with <i class="fa fa-heart"></i> by <a href="mailto:webdev.nislam@gmail.com" target="_blank">Yii2</a></p>
                         </div>
                     </div>
 
-                    <div class="col-md-4">
-                        <div class="footer-card-icon">
-                            <i class="fa fa-cc-discover"></i>
-                            <i class="fa fa-cc-mastercard"></i>
-                            <i class="fa fa-cc-paypal"></i>
-                            <i class="fa fa-cc-visa"></i>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div> <!-- End footer bottom area -->

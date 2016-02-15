@@ -32,3 +32,6 @@
 .bottom-padding-100 {
     padding-bottom: 65px !important;
 }
+.product-order-cart img.thumb {
+     height: 100px;
+}
