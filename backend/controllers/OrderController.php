@@ -101,8 +101,8 @@ class OrderController extends Controller {
             
             if($model->status == 2){
                 $model->total_paid = $model->total_amount;
-                $model->save();
             }
+            $model->save();
             
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
