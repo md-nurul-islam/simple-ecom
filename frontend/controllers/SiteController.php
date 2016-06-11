@@ -127,12 +127,21 @@ class SiteController extends Controller {
         if (isset($_POST) && !empty($_POST['place_order'])) {
 
             $grand_total = 0.00;
+            $grand_total_purchase_price = 0.00;
+
             foreach ($cart_items as $ci) {
                 $unit_price = floatval($ci->selling_price);
                 $qty = intval($cart_json[$ci->id]['qty']);
                 $row_total = $unit_price * $qty;
                 $grand_total += $row_total;
+
+                $unit_purchase_price = floatval($ci->purchase_price);
+                $row_total_purchase_price = $unit_purchase_price * $qty;
+                $grand_total_purchase_price += $row_total_purchase_price;
             }
+
+
+
 
             $order = new Order();
             $order->bill_number = Custom::getUniqueId(0, 6);
@@ -143,10 +152,12 @@ class SiteController extends Controller {
             $order->beforeSave(true);
 
             if ($order->validate() && $order->insert()) {
+                $product = '';
                 foreach ($cart_items as $ci) {
                     $unit_price = floatval($ci->selling_price);
                     $qty = intval($cart_json[$ci->id]['qty']);
                     $row_total = $unit_price * $qty;
+                    $product .= "{$ci->id},";
 
                     $cart = new Cart;
                     $cart->order_id = $order->id;
@@ -160,6 +171,11 @@ class SiteController extends Controller {
                 }
             }
 
+            $sale_amount = $grand_total - $grand_total_purchase_price;
+
+            $app_root = \Yii::getAlias('@approot');
+            include("{$app_root}/affiliate/controller/record-sale.php");
+            
             $cookies = Yii::$app->response->cookies;
             if (isset($_COOKIE['cart_' . $user_id])) {
                 $cookies->remove('cart_' . $user_id);
@@ -258,6 +274,7 @@ class SiteController extends Controller {
         $user_id = 0;
         if (!Yii::$app->user->isGuest) {
             $user_id = Yii::$app->user->identity->id;
+            $email = Yii::$app->user->identity->email;
         }
 
         $cart_json = [];
@@ -269,6 +286,14 @@ class SiteController extends Controller {
         }
         $ar_product_id = array_keys($cart_json);
         $cart_items = Product::find()->where(['in', 'id', $cart_json])->all();
+
+        $affiliate = \frontend\models\ApMembers::find()->getAffiliateByEmail(Yii::$app->user->identity->email)->one();
+        // add a new cookie to track affiliate sale
+        $cookies = Yii::$app->response->cookies;
+        $cookies->add(new \yii\web\Cookie([
+            'name' => 'ap_ref_tracking',
+            'value' => $affiliate->id,
+        ]));
 
         return $this->render('cart', [
                     'cart_items' => $cart_items,
@@ -330,10 +355,10 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionLogout() {
-        
+
         $cookies = Yii::$app->response->cookies;
         $user_id = Yii::$app->user->identity->id;
-        
+
         if (isset($_COOKIE['cart_' . $user_id])) {
             $cookies->remove('cart_' . $user_id);
             unset($cookies['cart_' . $user_id]);

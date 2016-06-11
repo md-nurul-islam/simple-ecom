@@ -25,6 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php echo $form->field($model, 'contact_number'); ?>
                 <?php echo $form->field($model, 'password')->passwordInput(); ?>
                 <?php echo $form->field($model, 'confirm_password')->passwordInput(); ?>
+                <?php echo $form->field($model, 'is_affiliate')->checkbox(); ?>
+
+                <?php if (isset($_GET['ref'])) { ?>
+                    <input type="hidden" id="signupform-referrar_id" name="SignupForm[referrar_id]" value="<?php echo $_GET['ref']; ?>">
+                <?php } ?>
 
                 <div class="form-group">
                     <?php echo Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>

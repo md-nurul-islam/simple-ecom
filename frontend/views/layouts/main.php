@@ -15,7 +15,7 @@ use common\models\Manufacturer;
 
 AppAsset::register($this);
 GoogleFontsAsset::register($this);
-$this->title = 'yiiCommerce';
+$this->title = 'Work Togather';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -62,7 +62,7 @@ $this->title = 'yiiCommerce';
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="logo">
-                            <h1><?php echo Html::a('yii<span>Commerce</span>', Url::to([''])); ?></h1>
+                            <h1><?php echo Html::a('<span>Work </span>Togather', Url::to(['/'])); ?></h1>
                         </div>
                     </div>
 
@@ -186,7 +186,7 @@ $this->title = 'yiiCommerce';
                 <div class="row">
                     <div class="col-md-8">
                         <div class="copyright">
-                            <p>&copy; 2016 yiiCommerce. All Rights Reserved. Coded with <i class="fa fa-heart"></i> by <a href="mailto:webdev.nislam@gmail.com" target="_blank">Yii2</a></p>
+                            <p>&copy; 2016 Work Togather. All Rights Reserved. Coded with <i class="fa fa-heart"></i> by <a href="mailto:webdev.nislam@gmail.com" target="_blank">Yii2</a></p>
                         </div>
                     </div>
 
